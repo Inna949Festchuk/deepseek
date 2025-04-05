@@ -1,2 +1,4 @@
 venv
 .env
+install.sh
+nvidia-container-toolkit
