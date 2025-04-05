@@ -87,7 +87,11 @@ response = client.chat.completions.create(
     ],
     model='deepseek-r1:1.5b',
 )
-print(response)
+# print(response)
+
+# Извлечение content
+content = response.choices[0].message.content
+print(content)
 
 ```
 локально
