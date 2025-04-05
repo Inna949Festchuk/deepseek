@@ -1,7 +1,7 @@
 from openai import OpenAI
 
 client = OpenAI(
-    base_url='http://localhost:11435/v1/', # Стандартный порт
+    base_url='http://localhost:11434/v1/', # Стандартный порт
     # base_url='http://localhost:11435/v1/', # Проброшенный в контейнер
 
     # required but ignored
