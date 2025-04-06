@@ -11,58 +11,75 @@
 ```bash
 ollama run deepseek-r1:1.5b 
 ```
-4. Задать промт
+4. Задать промт прямо в консоли, либо в клиенте как это сделано ниже:
 
-5. Выйти
+**clientlocal.py**
+```Python
+from ollama import chat
+
+messages = [
+  {
+    'role': 'user',
+    'content': 'Why is the sky blue?',
+  },
+]
+
+response = chat('deepseek-r1:1.5b', messages=messages)
+print(response['message']['content'])
+```
+
+5. Чтобы выйти введите в консоли
 ```bash
 /bye
 ```
 
 ## Чтобы запустить модель через Ollama в серверном режиме, выполните следующие шаги:
 
-Установите Ollama (если ещё не установлено):
+1. Установите Ollama (если ещё не установлено):
 
-Для Linux/macOS:
+- Для Linux/macOS:
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
-Для Windows: загрузите установщик с официального сайта.
+- Для Windows: загрузите установщик с официального сайта.
 
-Запустите сервер Ollama(первый старт должен быть автоматически):
+2. Запустите сервер Ollama(первый старт должен быть автоматически):
 ```bash
 ollama serve
 ```
 Сервер будет доступен на `http://localhost:11434`.
 
-Проверка статуса службы
+3. Проверка статуса службы
 ```bash
 sudo systemctl status ollama 
 ```
 
-[Выбирете](https://ollama.com/search) и загрузите модель (если ещё не загружена, **!сервер должен работать!**):
+4. [Выбирете](https://ollama.com/search) и загрузите модель (если ещё не загружена, **!сервер должен работать!**):
 ```bash
 ollama pull deepseek-r1:1.5b
 ```
 
-Просмотреть загруженные модели:
+5. Просмотреть загруженные модели:
 ```bash
 ollama ls
 ```
 
-Проверить доступность API:
+6. Проверить доступность API:
 ```bash
 curl http://localhost:11434/api/tags
 ```
 
-Пример запроса к модели:
+7. Пример запроса к модели из терминала:
 ```bash
 curl http://localhost:11434/api/generate -d '{"model": "deepseek-r1:1.5b", "prompt": "Hello", "stream": false}'
 ```
 **Другие примеры [тут](https://github.com/ollama/ollama/blob/main/docs/api.md#model-names)**
 
-**удаленно**
+8. Пример запроса к модели из клиента:
+
+**client.py**
 ```Python
 from openai import OpenAI
 
@@ -89,20 +106,7 @@ content = response.choices[0].message.content
 print(content)
 ```
 
-**локально**
-```Python
-from ollama import chat
-
-messages = [
-  {
-    'role': 'user',
-    'content': 'Why is the sky blue?',
-  },
-]
-
-response = chat('deepseek-r1:1.5b', messages=messages)
-print(response['message']['content'])
-```
+9. Остановить сервер.
 
 ## Если использовать Dockerfile и CPU:
 
