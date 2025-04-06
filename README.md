@@ -1,12 +1,11 @@
-## [Все инструкции тут](https://github.com/ollama)
-
-### **Мои заметки:**
+## Разворачиваем любые нейронки с помощью Ollama 
+Мои заметки. [Полная инструкция тут](https://github.com/ollama)
 
 ## Чтобы запустить модель через Ollama просто в терминале
 
 1. Установить `ollama` через pacman (у меня Linux Manjaro)
 
-2. Выбрать нужную модель тут: https://ollama.com/search
+2. Выбрать нужную модель [тут](https://ollama.com/search)
 
 3. Запустить в терминале (например `deepseek-r1:1.5b`)
 ```bash
@@ -31,25 +30,21 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 Для Windows: загрузите установщик с официального сайта.
 
-
 Запустите сервер Ollama(первый старт должен быть автоматически):
-
 ```bash
 ollama serve
 ```
-Сервер будет доступен на http://localhost:11434.
-
+Сервер будет доступен на `http://localhost:11434`.
 
 Проверка статуса службы
 ```bash
 sudo systemctl status ollama 
 ```
 
-[Выбирете](https://ollama.com/search) и загрузите модель (если ещё не загружена, !сервер должен работать!):
+[Выбирете](https://ollama.com/search) и загрузите модель (если ещё не загружена, **!сервер должен работать!**):
 ```bash
 ollama pull deepseek-r1:1.5b
 ```
-см. https://ollama.com/search
 
 Просмотреть загруженные модели:
 ```bash
@@ -65,9 +60,9 @@ curl http://localhost:11434/api/tags
 ```bash
 curl http://localhost:11434/api/generate -d '{"model": "deepseek-r1:1.5b", "prompt": "Hello", "stream": false}'
 ```
-см. https://github.com/ollama/ollama/blob/main/docs/api.md#model-names
+**Другие примеры [тут](https://github.com/ollama/ollama/blob/main/docs/api.md#model-names)**
 
-удаленно
+**удаленно**
 ```Python
 from openai import OpenAI
 
@@ -92,9 +87,9 @@ response = client.chat.completions.create(
 # Извлечение content
 content = response.choices[0].message.content
 print(content)
-
 ```
-локально
+
+**локально**
 ```Python
 from ollama import chat
 
@@ -149,7 +144,7 @@ docker ps -a
 docker start <ID CONTAINER>
 ```
 
-6. Загружаем [нужную](https://ollama.com/library) модель в запущенный контейнер с названием `ollama`
+6. Загружаем [нужную](https://ollama.com/library) модель в запущенный контейнер с названием `ollama_cpu`
 ```bash
 docker exec -it ollama_cpu ollama run deepseek-r1:1.5b
 ```
@@ -185,24 +180,54 @@ docker image ls
 ```
 
 4. Настраиваем GPU. Действуем по [инструкции](https://hub.docker.com/r/ollama/ollama)
-для операционных систем:
+
+---
+# Например, для GPU NVIDIA и операционных систем:
     - Ubuntu (16.04, 18.04, 20.04, 22.04 и выше)
     - Debian (10 и выше) и другие системы, работающие с apt
 
----
-**!Внимание!**
-**Установка NVIDIA Container Toolkit для Linux Manjaro/Arch**
-
-Manjaro уже имеет в своем стандартном репозитории NVIDIA драйверы и интеграцию с контейнерами, 
-поэтому **настраивать репозитории НЕ НУЖНО** и **для установки NVIDIA Container Toolkit в Manjaro используем `pacman`**, 
-поэтому инструкцию модифицируем и оставляем только следующее
-
+# Настройка репозитория NVIDIA
 ```bash
+echo "Setting up NVIDIA repository..."
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list \
+    | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' \
+    | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+```
+
+# Обновление пакетов и установка NVIDIA Container Toolkit
+```bash
+echo "Installing NVIDIA Container Toolkit..."
+sudo apt-get update
+sudo apt-get install -y nvidia-container-toolkit
+```
+
+# Настройка Docker runtime
+```bash
+echo "Configuring Docker to use NVIDIA runtime..."
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+```
+
+---
+# **!Внимание!** пример, для GPU NVIDIA и операционных систем:
+    - Linux Manjaro/Arch
+
+# Настройка репозитория NVIDIA
+Manjaro уже имеет в своем стандартном репозитории NVIDIA драйверы и интеграцию с контейнерами, 
+поэтому **настраивать репозитории НЕ НУЖНО** 
+
+# Обновление пакетов и установка NVIDIA Container Toolkit
+для установки NVIDIA Container Toolkit в Manjaro **используем `pacman`**
+
 # Настройка Docker для использования NVIDIA runtime
+```bash
 echo "Настройка Docker для NVIDIA runtime..."
 sudo nvidia-ctk runtime configure --runtime=docker
+```
 
 # Перезапуск Docker
+```bash
 echo "Перезапуск Docker службы..."
 sudo systemctl enable docker --now
 sudo systemctl restart docker
