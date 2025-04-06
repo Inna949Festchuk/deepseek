@@ -45,7 +45,7 @@ ollama serve
 sudo systemctl status ollama 
 ```
 
-[Выбририте](https://ollama.com/search) и загрузите модель (если ещё не загружена, !сервер должен работать!):
+[Выбирете](https://ollama.com/search) и загрузите модель (если ещё не загружена, !сервер должен работать!):
 ```bash
 ollama pull deepseek-r1:1.5b
 ```
@@ -110,56 +110,58 @@ print(response['message']['content'])
 ```
 
 ## Если использовать Dockerfile и CPU:
-1. Идем сюда:
-https://hub.docker.com/r/ollama/ollama
+
+1. Идем [сюда](https://hub.docker.com/r/ollama/ollama)
 
 2. Пулим образ ollama/ollama:
 ```bash
 docker pull ollama/ollama
 ```
+
 3. Проверяем образы
 ```bash
 docker image ls
 ```
-4. Запускаем контейнер с названием `ollama` по [инструкции](https://hub.docker.com/r/ollama/ollama) для CPU или GPU.
 
-*Например, для CPU:*
+4. Запускаем контейнер с названием `ollama_cpu` по [инструкции](https://hub.docker.com/r/ollama/ollama) для CPU.
 ```bash
-docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+docker run -d -v ollama:/root/.ollama -p 11435:11434 --name ollama_cpu ollama/ollama
 ```
-5. Проверяем контейнеры:
 
+5. Проверяем контейнеры:
 Запущенные
 ```bash
 docker ps
 ```
 
-Останавливаем
+- Останавливаем
 ```bash
 docker stop <ID CONTAINER>
 ```
 
-Остановленные
+- Остановленные
 ```bash
 docker ps -a
 ```
 
-Запускаем
+- Запускаем
 ```bash
 docker start <ID CONTAINER>
 ```
+
 6. Загружаем [нужную](https://ollama.com/library) модель в запущенный контейнер с названием `ollama`
 ```bash
-docker exec -it ollama ollama run deepseek-r1:1.5b
+docker exec -it ollama_cpu ollama run deepseek-r1:1.5b
 ```
+
 7. Проверить доступность API:
 ```bash
-curl http://localhost:11434/api/tags
+curl http://localhost:11435/api/tags
 ```
 
 8. Пример запроса к модели:
 ```bash
-curl http://localhost:11434/api/generate -d '{"model": "deepseek-r1:1.5b", "prompt": "Hello", "stream": false}'
+curl http://localhost:11435/api/generate -d '{"model": "deepseek-r1:1.5b", "prompt": "Hello", "stream": false}'
 ```
 см. https://github.com/ollama/ollama/blob/main/docs/api.md#model-names
 
@@ -168,53 +170,77 @@ curl http://localhost:11434/api/generate -d '{"model": "deepseek-r1:1.5b", "prom
 /bye
 ```
 
-
 ## Если использовать Dockerfile и GPU:
-1. Идем сюда:
-https://hub.docker.com/r/ollama/ollama
+
+1. Идем [сюда](https://hub.docker.com/r/ollama/ollama)
 
 2. Пулим образ ollama/ollama:
 ```bash
 docker pull ollama/ollama
 ```
+
 3. Проверяем образы
 ```bash
 docker image ls
 ```
-4. Настраиваем GPU. Действуем по инструкции здесь https://hub.docker.com/r/ollama/ollama
 
-5. Запускаем контейнер с названием `ollama` по [инструкции](https://hub.docker.com/r/ollama/ollama) для CPU или GPU.
+4. Настраиваем GPU. Действуем по [инструкции](https://hub.docker.com/r/ollama/ollama)
+для операционных систем:
+    - Ubuntu (16.04, 18.04, 20.04, 22.04 и выше)
+    - Debian (10 и выше) и другие системы, работающие с apt
 
-*Например, для GPU:*
+---
+**!Внимание!**
+**Установка NVIDIA Container Toolkit для Linux Manjaro/Arch**
+
+Manjaro уже имеет в своем стандартном репозитории NVIDIA драйверы и интеграцию с контейнерами, 
+поэтому **настраивать репозитории НЕ НУЖНО** и **для установки NVIDIA Container Toolkit в Manjaro используем `pacman`**, 
+поэтому инструкцию модифицируем и оставляем только следующее
+
+```bash
+# Настройка Docker для использования NVIDIA runtime
+echo "Настройка Docker для NVIDIA runtime..."
+sudo nvidia-ctk runtime configure --runtime=docker
+
+# Перезапуск Docker
+echo "Перезапуск Docker службы..."
+sudo systemctl enable docker --now
+sudo systemctl restart docker
+```
+---
+
+6. Запускаем контейнер с названием `ollama_gpu`.
 ```bash
 docker run -d --gpus=all -v ollama:/root/.ollama -p 11436:11434 --name ollama_gpu ollama/ollama
 ```
 
 6. Проверяем контейнеры:
 
-Запущенные
+- Запущенные
 ```bash
 docker ps
 ```
 
-Останавливаем
+- Останавливаем
 ```bash
 docker stop <ID CONTAINER>
 ```
 
-Остановленные
+- Остановленные
 ```bash
 docker ps -a
 ```
 
-Запускаем
+- Запускаем
 ```bash
 docker start <ID CONTAINER>
 ```
-7. Загружаем [нужную](https://ollama.com/library) модель в запущенный контейнер с названием `ollama`
+
+7. Загружаем [нужную](https://ollama.com/library) модель в запущенный контейнер с названием `ollama_gpu`
 ```bash
 docker exec -it ollama_gpu ollama run deepseek-r1:1.5b
 ```
+
 8. Проверить доступность API:
 ```bash
 curl http://localhost:11436/api/tags
@@ -229,90 +255,6 @@ curl http://localhost:11436/api/generate -d '{"model": "deepseek-r1:1.5b", "prom
 10. Останавливаем модель в контейнере:
 ```bash
 /bye
-```
-
-
-## Использовать Ollama c Docker-compose и CPU
-
-1. Идем в эту дирректорию `docker-compose-cpu` и запускаем в ней терминал
-
-2. В терминале:
-```bash
-docker-compose up -d
-```
-3. Проверяем запущенные контейнеры
-```bash
-docker ps
-```
-4. Загружаем [нужную](https://ollama.com/library) модель в запущенный контейнер с названием `ollama_cpu`
-```bash
-docker exec -it ollama_cpu ollama run deepseek-r1:1.5b
-```
-5. Выполняем тестовые запросы
-
-6. Останавливаем модель в контейнере:
-```bash
-/bye
-```
-7. Останавливаем и выгружаем контейнер:
-```bash
-docker-compose down <ID CONTAINER>
-```
-
-## Использовать Ollama c Docker-compose и GPU
-
-1. Идем в эту дирректорию `docker-compose-gpu` и запускаем в ней терминал
-
-2. В терминале для операционных систем:
-    - Ubuntu (16.04, 18.04, 20.04, 22.04 и выше)
-    - Debian (10 и выше)
-    - Другие системы, работающие с apt, например:
-    - Pop!_OS
-    - Linux Mint (на базе Ubuntu/Debian)
-
-- запускаем скрипт `setup.sh`
-```bash
-setup.sh
-```
-
-2. В терминале для операционных систем:
-    - Manjaro Linux основан на Arch Linux
-
-- даем право на выполнение
-```bash
-sudo chmod +x setuparch.sh
-```
-
-- запускаем скрипт `setuparch.sh`
-```bash
-sudo ./setuparch.sh
-```
-
-3. Запускаем Docker Compose:
-```bash
-docker-compose up -d
-```
-
-4. Проверяем запущенные контейнеры
-```bash
-docker ps
-```
-
-5. Загружаем [нужную](https://ollama.com/library) модель в запущенный контейнер с названием `ollama_gpu`
-```bash
-docker exec -it ollama_gpu ollama run deepseek-r1:1.5b
-```
-
-6. Выполняем тестовые запросы
-
-7. Останавливаем модель в контейнере:
-```bash
-/bye
-```
-
-8. Останавливаем и выгружаем контейнер:
-```bash
-docker-compose down <ID CONTAINER>
 ```
 
 ## Если использовать фреймворк ollama с python:
