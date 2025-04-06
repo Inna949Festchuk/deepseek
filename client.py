@@ -13,7 +13,7 @@ response = client.chat.completions.create(
     messages=[
         {
             'role': 'user',
-            'content': 'Hello',
+            'content': 'You are a programmer, write "Hello world" in Python',
         }
     ],
     model='deepseek-r1:1.5b',
