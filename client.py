@@ -16,8 +16,8 @@ response = client.chat.completions.create(
             'content': 'You are a programmer, write "Hello world" in Python',
         }
     ],
-    # model='deepseek-r1:1.5b',
-    model='llama3',
+    model='deepseek-r1:1.5b',
+    # model='llama3',
 )
 
 # print(response)

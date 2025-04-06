@@ -1,6 +1,45 @@
 ## Разворачиваем любые нейронки с помощью Ollama на примере DeepSeek
 **Мои заметки. [Полная инструкция тут](https://github.com/ollama)**
 
+### Подготовка системы Linux Manjaro:
+- Проверьте и установите драйвер nvidia (в поиск pacman введите nvidia) 
+- NVIDIA CUDA Toolkit (в поиск pacman введите cuda)
+
+### Настройка переменных окружения: Добавьте пути к CUDA в ваш файл .bashrc или .zshrc:
+```bash
+echo 'export PATH="/opt/cuda/bin:$PATH"' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH="/opt/cuda/lib64:$LD_LIBRARY_PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+### Тестирование CUDA: Для проверки установки CUDA выполните команду:
+```bash
+nvcc -V
+```
+
+- NVIDIA Container Toolkit (в поиск pacman введите nvidia-container-toolkit)
+
+### Настройка Docker для использования NVIDIA runtime
+```bash
+echo "Настройка Docker для NVIDIA runtime..."
+sudo nvidia-ctk runtime configure --runtime=docker
+```
+
+### Перезапуск Docker
+```bash
+echo "Перезапуск Docker службы..."
+sudo systemctl enable docker --now
+sudo systemctl restart docker
+```
+### Тестирование GPU: Для проверки работы GPU выполните команду:
+
+```bash
+nvidia-smi
+```
+
+Это отобразит информацию о вашей видеокарте NVIDIA и активных процессах.
+Теперь вы готовы использовать GPU для ускорения своих моделей.
+
 ## Чтобы запустить модель через Ollama просто в терминале
 
 1. Установить `ollama` через pacman (у меня Linux Manjaro)
@@ -11,9 +50,11 @@
 ```bash
 ollama run deepseek-r1:1.5b 
 ```
-4. Задать промт прямо в консоли, либо в клиенте как это сделано ниже:
+4. Задать промт прямо в консоли, либо в клиенте как это сделано ниже
+(перед запуском кода установите все зависимости из requirements.txt):
 
-**clientlocal.py**
+`**clientlocal.py**`
+
 ```Python
 from ollama import chat
 
@@ -31,6 +72,21 @@ print(response['message']['content'])
 5. Чтобы выйти введите в консоли
 ```bash
 /bye
+```
+
+6. Остановите службу (при необходимости):
+```bash
+sudo systemctl stop ollama
+```
+
+7. Запустить службу:
+```bash
+sudo systemctl start ollama
+```
+
+8. Проверить статус службы:
+```bash
+sudo systemctl status ollama
 ```
 
 ## Чтобы запустить модель через Ollama в серверном режиме, выполните следующие шаги:
@@ -185,10 +241,6 @@ docker image ls
 
 4. Настраиваем GPU. Действуем по [инструкции](https://hub.docker.com/r/ollama/ollama)
 
----
-## Например, для GPU NVIDIA и операционных систем:
-- Ubuntu (16.04, 18.04, 20.04, 22.04 и выше)
-- Debian (10 и выше) и другие системы, работающие с apt
 
 ### Настройка репозитория NVIDIA
 ```bash
