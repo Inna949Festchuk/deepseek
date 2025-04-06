@@ -1,9 +1,12 @@
 ## Разворачиваем любые нейронки с помощью Ollama на примере DeepSeek
 **Мои заметки. [Полная инструкция тут](https://github.com/ollama)**
 
-### Подготовка системы Linux Manjaro:
-- Проверьте и установите драйвер nvidia (в поиск pacman введите nvidia) 
-- NVIDIA CUDA Toolkit (в поиск pacman введите cuda)
+### Подготовка системы Linux Manjaro (если хостовая операционная система Linux Manjaro, как у меня, если Ubuntu, Debian и аналогичные смотри ниже или [тут](https://hub.docker.com/r/ollama/ollama)):
+
+Manjaro уже имеет в своем стандартном репозитории NVIDIA драйверы и интеграцию с контейнерами, поэтому **настраивать репозитории НЕ НУЖНО**
+
+- Проверьте и, если не установлен, установите драйвер nvidia (в поиск pacman введите nvidia). 
+- NVIDIA CUDA Toolkit (в поиск pacman введите cuda) Я пока так и не понял нужен или нет, но на всякий случай.
 
 ### Настройка переменных окружения: Добавьте пути к CUDA в ваш файл .bashrc или .zshrc:
 ```bash
@@ -17,7 +20,7 @@ source ~/.bashrc
 nvcc -V
 ```
 
-- NVIDIA Container Toolkit (в поиск pacman введите nvidia-container-toolkit)
+- NVIDIA Container Toolkit (в поиск pacman введите nvidia-container-toolkit). **Этого зверя точно надо устанавливать дополнительно**.
 
 ### Настройка Docker для использования NVIDIA runtime
 ```bash
@@ -53,7 +56,7 @@ ollama run deepseek-r1:1.5b
 4. Задать промт прямо в консоли, либо в клиенте как это сделано ниже
 (перед запуском кода установите все зависимости из requirements.txt):
 
-`**clientlocal.py**`
+**`clientlocal.py`**
 
 ```Python
 from ollama import chat
@@ -135,7 +138,8 @@ curl http://localhost:11434/api/generate -d '{"model": "deepseek-r1:1.5b", "prom
 
 8. Пример запроса к модели из клиента:
 
-**client.py**
+**`client.py`**
+
 ```Python
 from openai import OpenAI
 
@@ -242,7 +246,7 @@ docker image ls
 4. Настраиваем GPU. Действуем по [инструкции](https://hub.docker.com/r/ollama/ollama)
 
 
-### Настройка репозитория NVIDIA
+### Настройка репозитория NVIDIA (Если ОС на хостовой машине Ubuntu, Debian и аналогичные)
 ```bash
 echo "Setting up NVIDIA repository..."
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg

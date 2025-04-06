@@ -1,0 +1,19 @@
+# version: "3.8"
+services:
+  ollama_gpu:
+    image: ollama/ollama
+    container_name: ollama_gpu
+    runtime: nvidia # Указывает использование NVIDIA драйвера
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    ports:
+      - "11436:11434"
+    volumes:
+      - ollama:/root/.ollama
+    stdin_open: true  # позволяет использовать docker exec -it
+    tty: true         # добавляет поддержку для интерактивного tty
+
+volumes:
+  ollama:
+    driver: local
