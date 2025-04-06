@@ -182,11 +182,11 @@ docker image ls
 4. Настраиваем GPU. Действуем по [инструкции](https://hub.docker.com/r/ollama/ollama)
 
 ---
-# Например, для GPU NVIDIA и операционных систем:
-    - Ubuntu (16.04, 18.04, 20.04, 22.04 и выше)
-    - Debian (10 и выше) и другие системы, работающие с apt
+## Например, для GPU NVIDIA и операционных систем:
+- Ubuntu (16.04, 18.04, 20.04, 22.04 и выше)
+- Debian (10 и выше) и другие системы, работающие с apt
 
-# Настройка репозитория NVIDIA
+### Настройка репозитория NVIDIA
 ```bash
 echo "Setting up NVIDIA repository..."
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
@@ -195,38 +195,38 @@ curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-contai
     | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 ```
 
-# Обновление пакетов и установка NVIDIA Container Toolkit
+### Обновление пакетов и установка NVIDIA Container Toolkit
 ```bash
 echo "Installing NVIDIA Container Toolkit..."
 sudo apt-get update
 sudo apt-get install -y nvidia-container-toolkit
 ```
 
-# Настройка Docker runtime
+### Настройка Docker runtime
 ```bash
 echo "Configuring Docker to use NVIDIA runtime..."
 sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
 ```
-
 ---
-# **!Внимание!** пример, для GPU NVIDIA и операционных систем:
-    - Linux Manjaro/Arch
 
-# Настройка репозитория NVIDIA
+## !Внимание! пример, для GPU NVIDIA и операционных систем:
+- Linux Manjaro/Arch
+
+### Настройка репозитория NVIDIA
 Manjaro уже имеет в своем стандартном репозитории NVIDIA драйверы и интеграцию с контейнерами, 
 поэтому **настраивать репозитории НЕ НУЖНО** 
 
-# Обновление пакетов и установка NVIDIA Container Toolkit
+### Обновление пакетов и установка NVIDIA Container Toolkit
 для установки NVIDIA Container Toolkit в Manjaro **используем `pacman`**
 
-# Настройка Docker для использования NVIDIA runtime
+### Настройка Docker для использования NVIDIA runtime
 ```bash
 echo "Настройка Docker для NVIDIA runtime..."
 sudo nvidia-ctk runtime configure --runtime=docker
 ```
 
-# Перезапуск Docker
+### Перезапуск Docker
 ```bash
 echo "Перезапуск Docker службы..."
 sudo systemctl enable docker --now
