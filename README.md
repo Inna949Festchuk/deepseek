@@ -77,7 +77,7 @@ print(response['message']['content'])
 /bye
 ```
 
-6. Остановите службу (при необходимости):
+6. Остановите службу (при необходимости запуска сервера `ollama serve` см. чуть ниже и если снова нужно запустить локальную версию `sudo systemctl restart ollama`):
 ```bash
 sudo systemctl stop ollama
 ```
