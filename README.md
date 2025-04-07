@@ -6,19 +6,19 @@
 Manjaro уже имеет в своем стандартном репозитории NVIDIA драйверы и интеграцию с контейнерами, поэтому **настраивать репозитории НЕ НУЖНО**
 
 - Проверьте и, если не установлен, установите драйвер nvidia (в поиск pacman введите nvidia). 
-- NVIDIA CUDA Toolkit (в поиск pacman введите cuda) Я пока так и не понял нужен или нет, но на всякий случай.
+- NVIDIA CUDA Toolkit (в поиск pacman введите cuda) [Источник](https://github.com/NVIDIA/nvidia-container-toolkit) "Убедитесь, что вы установили драйвер NVIDIA для вашего дистрибутива Linux. Обратите внимание, что вам не нужно устанавливать CUDA Toolkit на хост-систему, но драйвер NVIDIA должен быть установлен."
 
-### Настройка переменных окружения: Добавьте пути к CUDA в ваш файл .bashrc или .zshrc:
+<!-- ### Настройка переменных окружения: Добавьте пути к CUDA в ваш файл .bashrc или .zshrc:
 ```bash
 echo 'export PATH="/opt/cuda/bin:$PATH"' >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH="/opt/cuda/lib64:$LD_LIBRARY_PATH"' >> ~/.bashrc
 source ~/.bashrc
-```
+``` -->
 
-### Тестирование CUDA: Для проверки установки CUDA выполните команду:
+<!-- ### Тестирование CUDA: Для проверки установки CUDA выполните команду:
 ```bash
 nvcc -V
-```
+``` -->
 
 - NVIDIA Container Toolkit (в поиск pacman введите nvidia-container-toolkit). **Этого зверя точно надо устанавливать дополнительно**.
 
