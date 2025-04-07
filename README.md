@@ -125,18 +125,23 @@ ollama pull deepseek-r1:1.5b
 ollama ls
 ```
 
-6. Проверить доступность API:
+6. Удалить загруженные модели:
+```bash
+ollama rm deepseek-r1:1.5b
+```
+
+7. Проверить доступность API:
 ```bash
 curl http://localhost:11434/api/tags
 ```
 
-7. Пример запроса к модели из терминала:
+8. Пример запроса к модели из терминала:
 ```bash
 curl http://localhost:11434/api/generate -d '{"model": "deepseek-r1:1.5b", "prompt": "Hello", "stream": false}'
 ```
 **Другие примеры [тут](https://github.com/ollama/ollama/blob/main/docs/api.md#model-names)**
 
-8. Пример запроса к модели из клиента:
+9. Пример запроса к модели из клиента:
 
 **`client.py`**
 
@@ -166,7 +171,10 @@ content = response.choices[0].message.content
 print(content)
 ```
 
-9. Остановить сервер.
+10. Если снова нужно запустить локальную версию 
+```bash
+sudo systemctl restart ollama
+```
 
 ## Если использовать Dockerfile и CPU:
 
