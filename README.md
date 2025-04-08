@@ -5,7 +5,8 @@
 
 Manjaro уже имеет в своем стандартном репозитории NVIDIA драйверы и интеграцию с контейнерами, поэтому **настраивать репозитории НЕ НУЖНО**
 
-- Проверьте и, если не установлен, установите драйвер nvidia (в поиск pacman введите nvidia). 
+- Проверьте и, если не установлен, установите драйвер nvidia (в поиск pacman введите nvidia).
+- ollama и ollama-cuda (ввести в поиск pacman) 
 - NVIDIA CUDA Toolkit (в поиск pacman введите cuda) [Источник](https://github.com/NVIDIA/nvidia-container-toolkit) "Убедитесь, что вы установили драйвер NVIDIA для вашего дистрибутива Linux. Обратите внимание, что вам не нужно устанавливать CUDA Toolkit на хост-систему, но драйвер NVIDIA должен быть установлен."
 
 <!-- ### Настройка переменных окружения: Добавьте пути к CUDA в ваш файл .bashrc или .zshrc:
@@ -22,17 +23,12 @@ nvcc -V
 
 - NVIDIA Container Toolkit (в поиск pacman введите nvidia-container-toolkit). **Этого зверя точно надо устанавливать дополнительно**.
 
-### Настройка Docker для использования NVIDIA runtime
+### Запуск службы ollama
 ```bash
-echo "Настройка Docker для NVIDIA runtime..."
-sudo nvidia-ctk runtime configure --runtime=docker
-```
-
-### Перезапуск Docker
-```bash
-echo "Перезапуск Docker службы..."
-sudo systemctl enable docker --now
-sudo systemctl restart docker
+echo "Запуск службы и проверка работоспособности"
+sudo systemctl enable ollama
+sudo systemctl start ollama
+sudo systemctl status ollama
 ```
 ### Тестирование GPU: Для проверки работы GPU выполните команду:
 
